@@ -52,15 +52,13 @@ int main(void)
   while (1)
   {
 
-/*
 	  if(FLAG == 1)
 	  {
+
 	   	HAL_GPIO_TogglePin(led_green_GPIO_Port, led_green_Pin);
 	  	HAL_Delay(50);
 	  	FLAG = 0;
 	  }
-*/
-
 /*
 
  	  HAL_ADC_Start(&hadc1);

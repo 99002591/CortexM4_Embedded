@@ -14,8 +14,6 @@ struct potentiometerVariables
 	volatile uint16_t pot_conversion, pot_value;
 }potvar;
 
-volatile uint8_t FLAG;
-
 ADC_HandleTypeDef hadc1;
 SPI_HandleTypeDef hspi1;
 TIM_HandleTypeDef htim6;
@@ -28,10 +26,6 @@ static void MX_ADC1_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_UART4_Init(void);
 void delay (uint16_t time);
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	FLAG = 1;
-}
 
 int main(void)
 {
@@ -46,30 +40,16 @@ int main(void)
   MX_UART4_Init();
 
   HAL_TIM_Base_Start(&htim6);
-
-
+  HAL_ADC_Start(&hadc1);
 
   while (1)
   {
-
-/*
-	  if(FLAG == 1)
-	  {
-	   	HAL_GPIO_TogglePin(led_green_GPIO_Port, led_green_Pin);
-	  	HAL_Delay(50);
-	  	FLAG = 0;
-	  }
-*/
-
-/*
-
- 	  HAL_ADC_Start(&hadc1);
-	  if(HAL_ADC_PollForConversion(&hadc1, 50) == HAL_OK)
-	  {
-		  potvar.pot_value = HAL_ADC_GetValue(&hadc1);
-	  }
-*/
-
+	  HAL_ADC_Start(&hadc1);
+	  potvar.pot_conversion = HAL_ADC_PollForConversion(&hadc1, 50);
+	  potvar.pot_value = HAL_ADC_GetValue(&hadc1);
+	 // uint16_t temp = potvar.pot_value;
+	 // HAL_SPI_Transmit(&hspi1, &temp, 16, 10);
+	  //HAL_Delay(1000);
 /*	  DHT11_Start();
 	  dhtsensorvar.response = DHT11_Check_Response();
 	  HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, DISABLE);
