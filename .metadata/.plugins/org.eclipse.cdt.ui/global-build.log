@@ -1,0 +1,70 @@
+15:42:38 **** Incremental Build of configuration Debug for project 001HumidtyMonitor ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DDEBUG -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "001HumidtyMonitor.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\CortexM4_Embedded\001HumidtyMonitor\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="001HumidtyMonitor.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 001HumidtyMonitor.elf
+ 
+arm-none-eabi-objdump -h -S  001HumidtyMonitor.elf  > "001HumidtyMonitor.list"
+arm-none-eabi-objcopy  -O binary  001HumidtyMonitor.elf  "001HumidtyMonitor.bin"
+arm-none-eabi-size   001HumidtyMonitor.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11944	     20	   1876	  13840	   3610	001HumidtyMonitor.elf
+Finished building: default.size.stdout
+ 
+Finished building: 001HumidtyMonitor.bin
+ 
+Finished building: 001HumidtyMonitor.list
+ 
+15:42:42 **** Incremental Build of configuration Debug for project 001HumidtyMonitor ****
+make -j4 all 
+arm-none-eabi-size   001HumidtyMonitor.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11944	     20	   1876	  13840	   3610	001HumidtyMonitor.elf
+Finished building: default.size.stdout
+ 
+15:47:35 **** Incremental Build of configuration Debug for project 001HumidtyMonitor ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/DHT11.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DDEBUG -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/DHT11.d" -MT"Core/Src/DHT11.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/DHT11.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DDEBUG -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/DHT11.c: In function 'DHT11_Start':
+../Core/Src/DHT11.c:30:2: warning: implicit declaration of function 'delay' [-Wimplicit-function-declaration]
+  delay(18000);
+  ^~~~~
+arm-none-eabi-gcc -o "001HumidtyMonitor.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\CortexM4_Embedded\001HumidtyMonitor\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="001HumidtyMonitor.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 001HumidtyMonitor.elf
+ 
+arm-none-eabi-objdump -h -S  001HumidtyMonitor.elf  > "001HumidtyMonitor.list"
+arm-none-eabi-objcopy  -O binary  001HumidtyMonitor.elf  "001HumidtyMonitor.bin"
+arm-none-eabi-size   001HumidtyMonitor.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11952	     20	   1876	  13848	   3618	001HumidtyMonitor.elf
+Finished building: default.size.stdout
+ 
+Finished building: 001HumidtyMonitor.bin
+ 
+Finished building: 001HumidtyMonitor.list
+ 
+15:50:31 **** Incremental Build of configuration Debug for project 001HumidtyMonitor ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DDEBUG -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "001HumidtyMonitor.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\CortexM4_Embedded\001HumidtyMonitor\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="001HumidtyMonitor.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 001HumidtyMonitor.elf
+ 
+arm-none-eabi-objdump -h -S  001HumidtyMonitor.elf  > "001HumidtyMonitor.list"
+arm-none-eabi-objcopy  -O binary  001HumidtyMonitor.elf  "001HumidtyMonitor.bin"
+arm-none-eabi-size   001HumidtyMonitor.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11972	     20	   1876	  13868	   362c	001HumidtyMonitor.elf
+Finished building: default.size.stdout
+ 
+Finished building: 001HumidtyMonitor.bin
+ 
+Finished building: 001HumidtyMonitor.list
+ 
+15:51:22 **** Incremental Build of configuration Debug for project 001HumidtyMonitor ****
+make -j4 all 
+arm-none-eabi-size   001HumidtyMonitor.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11972	     20	   1876	  13868	   362c	001HumidtyMonitor.elf
+Finished building: default.size.stdout
+ 
