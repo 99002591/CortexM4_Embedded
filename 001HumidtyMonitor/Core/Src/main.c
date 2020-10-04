@@ -23,11 +23,18 @@
 
 struct dht11Variables
 {
-	uint8_t humidity_byte1, humidity_byte2, temperature_byte1, temperature_byte2, response;
-	uint16_t parity, humidity_RAW, temperature_RAW;
-	float TEMPERATURE, HUMIDITY;
+	volatile uint8_t humidity_byte1, humidity_byte2, temperature_byte1, temperature_byte2, response;
+	volatile uint16_t parity, humidity_RAW, temperature_RAW;
+	volatile float TEMPERATURE, HUMIDITY;
 
 }dhtsensorvar;
+
+
+uint8_t Rh_byte1, Rh_byte2, Temp_byte1, Temp_byte2;
+uint16_t SUM, RH, TEMP;
+float Temperature = 0;
+float Humidity = 0;
+uint8_t Presence = 0;
 
 ADC_HandleTypeDef hadc1;
 SPI_HandleTypeDef hspi1;
@@ -44,6 +51,8 @@ void delay (uint16_t time);
 
 int main(void)
 {
+
+	HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, ENABLE);
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();
@@ -53,24 +62,43 @@ int main(void)
   MX_UART4_Init();
 
   HAL_TIM_Base_Start(&htim6);
-  DHT11_Start();
+
 
   while (1)
   {
+	  DHT11_Start();
 	  dhtsensorvar.response = DHT11_Check_Response();
-	  dhtsensorvar.humidity_byte1 = DHT11_Read();
-	  dhtsensorvar.humidity_byte2 = DHT11_Read();
-	  dhtsensorvar.temperature_byte1 = DHT11_Read();
-	  dhtsensorvar.temperature_byte2 = DHT11_Read();
-	  dhtsensorvar.parity = DHT11_Read();
-	  dhtsensorvar.humidity_RAW = dhtsensorvar.humidity_byte1;
-	  dhtsensorvar.temperature_RAW = dhtsensorvar.temperature_byte1;
-	  dhtsensorvar.TEMPERATURE = (float)dhtsensorvar.temperature_RAW;
-	  dhtsensorvar.HUMIDITY = (float)dhtsensorvar.humidity_RAW;
-	  //HAL_GPIO_WritePin(led_blue_GPIO_Port, led_blue_Pin, ENABLE);
+	  HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, DISABLE);
+	  if (dhtsensorvar.response == 1)
+	  {
+		  dhtsensorvar.humidity_byte1 = DHT11_Read();
+		  dhtsensorvar.humidity_byte2 = DHT11_Read();
+		  dhtsensorvar.temperature_byte1 = DHT11_Read();
+		  dhtsensorvar.temperature_byte2 = DHT11_Read();
+		  dhtsensorvar.parity = DHT11_Read();
+		  dhtsensorvar.humidity_RAW = dhtsensorvar.humidity_byte1;
+		  dhtsensorvar.temperature_RAW = dhtsensorvar.temperature_byte1;
+		  dhtsensorvar.TEMPERATURE = (float)dhtsensorvar.temperature_RAW;
+		  dhtsensorvar.HUMIDITY = (float)dhtsensorvar.humidity_RAW;
+		  uint8_t temp = (uint8_t)dhtsensorvar.HUMIDITY;
+		  //HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, DISABLE);
+		  HAL_SPI_Transmit(&hspi1, &temp, 1, 10);
+		  HAL_Delay(100);
+		  //HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, ENABLE);
+	  }
+	  else
+	  {
+		  //HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, DISABLE);
+		  HAL_SPI_Transmit(&hspi1, 2, 1, 10);
+		  //HAL_Delay(100);
+		  //HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, ENABLE);
+	  }
 
 	  delay(1000);
-	  if(dhtsensorvar.TEMPERATURE> 20 )
+
+
+	  //delay(100);
+/*	  if(dhtsensorvar.TEMPERATURE> 20 )
 	  {
 	  	  HAL_GPIO_WritePin(led_green_GPIO_Port, led_green_Pin, ENABLE);
 	  	  //HAL_GPIO_WritePin(led_blue_GPIO_Port, led_blue_Pin, DISABLE);
@@ -81,15 +109,19 @@ int main(void)
 	  	  HAL_GPIO_WritePin(led_blue_GPIO_Port, led_blue_Pin, ENABLE);
 	  }
 	  delay(1000);
+*/
+
   }
   return 0;
 }
+
 
 void delay (uint16_t time)
 {
 	__HAL_TIM_SET_COUNTER(&htim6, 0);
 	while ((__HAL_TIM_GET_COUNTER(&htim6))<time);
 }
+
 
 void SystemClock_Config(void)
 {
@@ -103,7 +135,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 50;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 7;
@@ -166,7 +198,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;

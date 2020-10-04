@@ -18,7 +18,7 @@ void Set_Pin_Input (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	GPIO_InitStruct.Pin = GPIO_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(GPIOx, &GPIO_InitStruct);
 }
@@ -26,8 +26,10 @@ void Set_Pin_Input (GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
 void DHT11_Start (void)
 {
 	Set_Pin_Output (dht11_GPIO_Port, dht11_Pin);
-	HAL_GPIO_WritePin (dht11_GPIO_Port, dht11_Pin, 0);
+	HAL_GPIO_WritePin (dht11_GPIO_Port, dht11_Pin, DISABLE);
 	delay(18000);
+	HAL_GPIO_WritePin(dht11_GPIO_Port, dht11_Pin, ENABLE);
+	delay(20);
 	Set_Pin_Input(dht11_GPIO_Port, dht11_Pin);
 }
 

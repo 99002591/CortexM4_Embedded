@@ -1,10 +1,10 @@
-15:51:22 **** Incremental Build of configuration Debug for project 001HumidtyMonitor ****
+18:44:33 **** Incremental Build of configuration Debug for project 001HumidtyMonitor ****
 make -j4 all 
 arm-none-eabi-size   001HumidtyMonitor.elf 
    text	   data	    bss	    dec	    hex	filename
-  11972	     20	   1876	  13868	   362c	001HumidtyMonitor.elf
+  13064	     20	   1892	  14976	   3a80	001HumidtyMonitor.elf
 Finished building: default.size.stdout
  
 
-15:51:23 Build Finished. 0 errors, 0 warnings. (took 310ms)
+18:44:33 Build Finished. 0 errors, 0 warnings. (took 309ms)
 
