@@ -11,7 +11,7 @@ void setup()
   SPCR |= _BV(SPE);                       
   received = false;
   SPI.attachInterrupt(); 
-  Serial.print("SYSTEM INITIALIZING>...........");
+  Serial.print("SYSTEM BOOTING>...........");
   delay(2000);
   Serial.print("SYSTEM READY");                 
 }
