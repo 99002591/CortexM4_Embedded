@@ -10,7 +10,10 @@ void setup()
   digitalWrite(10,LOW);
   SPCR |= _BV(SPE);                       
   received = false;
-  SPI.attachInterrupt();                  
+  SPI.attachInterrupt(); 
+  Serial.print("SYSTEM INITIALIZING>...........");
+  delay(2000);
+  Serial.print("SYSTEM READY");                 
 }
 
 
@@ -26,10 +29,21 @@ void loop()
 {
   if(received)                           
   {  
-      received = false;    
+      if(Slavereceived != 0)
+      {
+        received = false;    
       Serial.print("Humidity is  ");
       Serial.println(Slavereceived);
       delay(100);
+      }
+      else if (Slavereceived == 0)
+      {
+        Serial.println("POT is less than threshold");
+      }
+      else
+      {
+        //do nothing
+      }
   
   
   }

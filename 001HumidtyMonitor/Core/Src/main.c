@@ -37,7 +37,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 int main(void)
 {
-  HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, ENABLE);
+ // HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, ENABLE);
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();
@@ -47,15 +47,9 @@ int main(void)
   MX_UART4_Init();
 
   HAL_TIM_Base_Start(&htim6);
-  //potvar.pot_conversion = 600;
-  int comp = 700;
+  uint32_t comp = 400;
   while (1)
   {
-	  HAL_ADC_Start(&hadc1);
-	 	  if(HAL_ADC_PollForConversion(&hadc1, 50) == HAL_OK)
-	 	  {
-	 		  potvar.pot_value = HAL_ADC_GetValue(&hadc1);
-	 	  }
 
 	  if(FLAG == 1)
 	  {
@@ -66,9 +60,17 @@ int main(void)
 	  }
 
 
-
-	  if (counter % 2 == 1 && comp > 512)
+/*
+ 	  HAL_ADC_Start(&hadc1);
+	  if(HAL_ADC_PollForConversion(&hadc1, 50) == HAL_OK)
 	  {
+		  potvar.pot_value = HAL_ADC_GetValue(&hadc1);
+	  }
+*/
+
+	  if (counter % 2 != 0 && comp > 512)
+	  {
+		  HAL_GPIO_TogglePin(led_blue_GPIO_Port, led_blue_Pin);
 		  DHT11_Start();
 		  dhtsensorvar.response = DHT11_Check_Response();
 		  HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, DISABLE);
@@ -88,12 +90,23 @@ int main(void)
 			  HAL_SPI_Transmit(&hspi1, &temp1, 1, 10);
 			  HAL_Delay(100);
 		  }
-		  else
-		  {
-			  HAL_SPI_Abort(&hspi1);
-		  }
-
 	  }
+		  else if (counter % 2 != 0 && comp < 512)
+		  {
+			  HAL_SPI_Transmit(&hspi1, 0, 1, 10);
+			  HAL_Delay(100);
+		  }
+		  /*for(uint8_t count = 0 ; count < 4 ; count ++)
+		  {
+			  HAL_SPI_Transmit(&hspi1, &array[count], 1, 10);
+			  HAL_Delay(1000);
+		  }*/
+
+/*	  else
+	  {
+		  HAL_SPI_Transmit(&hspi1, DISABLE, 1, 10);
+	  }
+	  delay(1000);    */
 
   }
   return 0;
