@@ -1,11 +1,12 @@
 #include "main.h"
 #include "DHT11.h"
-
+#include <string.h>
+#include <stdlib.h>
 struct dht11Variables
 {
 	volatile uint8_t humidity_byte1, humidity_byte2, temperature_byte1, temperature_byte2, response;
 	volatile uint16_t parity, humidity_RAW, temperature_RAW;
-	volatile float TEMPERATURE, HUMIDITY;
+	volatile int TEMPERATURE, HUMIDITY;
 
 }dhtsensorvar;
 
@@ -15,6 +16,7 @@ struct potentiometerVariables
 }potvar;
 
 volatile uint8_t FLAG;
+volatile uint8_t counter = 0;
 
 ADC_HandleTypeDef hadc1;
 SPI_HandleTypeDef hspi1;
@@ -35,7 +37,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 int main(void)
 {
-
   HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, ENABLE);
   HAL_Init();
   SystemClock_Config();
@@ -47,19 +48,17 @@ int main(void)
 
   HAL_TIM_Base_Start(&htim6);
 
-
-
   while (1)
   {
 
-/*
 	  if(FLAG == 1)
 	  {
-	   	HAL_GPIO_TogglePin(led_green_GPIO_Port, led_green_Pin);
-	  	HAL_Delay(50);
-	  	FLAG = 0;
+		  HAL_GPIO_TogglePin(led_green_GPIO_Port, led_green_Pin);
+		  HAL_Delay(50);
+		  FLAG = 0;
+		  counter = counter + 1;
 	  }
-*/
+
 
 /*
 
@@ -70,30 +69,43 @@ int main(void)
 	  }
 */
 
-/*	  DHT11_Start();
-	  dhtsensorvar.response = DHT11_Check_Response();
-	  HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, DISABLE);
-	  if (dhtsensorvar.response == 1)
+	  if (counter % 2 == 1)
 	  {
-		  dhtsensorvar.humidity_byte1 = DHT11_Read();
-		  dhtsensorvar.humidity_byte2 = DHT11_Read();
-		  dhtsensorvar.temperature_byte1 = DHT11_Read();
-		  dhtsensorvar.temperature_byte2 = DHT11_Read();
-		  dhtsensorvar.parity = DHT11_Read();
-		  dhtsensorvar.humidity_RAW = dhtsensorvar.humidity_byte1;
-		  dhtsensorvar.temperature_RAW = dhtsensorvar.temperature_byte1;
-		  dhtsensorvar.TEMPERATURE = (float)dhtsensorvar.temperature_RAW;
-		  dhtsensorvar.HUMIDITY = (float)dhtsensorvar.humidity_RAW;
-		  uint8_t temp = (uint8_t)dhtsensorvar.HUMIDITY;
-		  HAL_SPI_Transmit(&hspi1, &temp, 1, 10);
-		  HAL_Delay(100);
+		  DHT11_Start();
+		  dhtsensorvar.response = DHT11_Check_Response();
+		  HAL_GPIO_WritePin(slave_select_GPIO_Port, slave_select_Pin, DISABLE);
+		  if (dhtsensorvar.response == 1)
+		  {
+			  dhtsensorvar.humidity_byte1 = DHT11_Read();
+			  dhtsensorvar.humidity_byte2 = DHT11_Read();
+			  dhtsensorvar.temperature_byte1 = DHT11_Read();
+			  dhtsensorvar.temperature_byte2 = DHT11_Read();
+			  dhtsensorvar.parity = DHT11_Read();
+			  dhtsensorvar.humidity_RAW = dhtsensorvar.humidity_byte1;
+			  dhtsensorvar.temperature_RAW = dhtsensorvar.temperature_byte1;
+			  dhtsensorvar.TEMPERATURE = (int)dhtsensorvar.temperature_RAW;
+			  dhtsensorvar.HUMIDITY = (int)dhtsensorvar.humidity_RAW;
+			  uint8_t temp1 = (uint8_t)dhtsensorvar.HUMIDITY;
+			  uint8_t temp2 = (uint8_t)dhtsensorvar.TEMPERATURE;
+			  HAL_SPI_Transmit(&hspi1, &temp1, 1, 10);
+			  HAL_Delay(100);
+		  }
+		  else
+		  {
+			  HAL_SPI_Abort(&hspi1);
+		  }
+		  /*for(uint8_t count = 0 ; count < 4 ; count ++)
+		  {
+			  HAL_SPI_Transmit(&hspi1, &array[count], 1, 10);
+			  HAL_Delay(1000);
+		  }*/
 	  }
-	  else
+/*	  else
 	  {
 		  HAL_SPI_Transmit(&hspi1, DISABLE, 1, 10);
 	  }
-	  delay(1000);
-*/
+	  delay(1000);    */
+
   }
   return 0;
 }

@@ -1,6 +1,6 @@
 #include<SPI.h>
 volatile boolean received;
-volatile uint16_t  Slavereceived;
+volatile uint16_t  Slavereceived, Slavereceived2;
 
 void setup()
 {
@@ -16,7 +16,7 @@ void setup()
 
 ISR (SPI_STC_vect)                        
 {
-    Slavereceived = SPDR;                
+    Slavereceived = SPDR;            
     received = true;
 }
 
@@ -26,7 +26,11 @@ void loop()
 {
   if(received)                           
   {  
+      received = false;    
+      Serial.print("Humidity is  ");
       Serial.println(Slavereceived);
       delay(100);
+      
   }
+ 
 }
