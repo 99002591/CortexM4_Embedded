@@ -51,11 +51,6 @@ int main(void)
   int comp = 700;
   while (1)
   {
-	  HAL_ADC_Start(&hadc1);
-	 	  if(HAL_ADC_PollForConversion(&hadc1, 50) == HAL_OK)
-	 	  {
-	 		  potvar.pot_value = HAL_ADC_GetValue(&hadc1);
-	 	  }
 
 	  if(FLAG == 1)
 	  {
@@ -65,6 +60,12 @@ int main(void)
 		  counter = counter + 1;
 	  }
 
+
+ 	  HAL_ADC_Start(&hadc1);
+	  if(HAL_ADC_PollForConversion(&hadc1, 50) == HAL_OK)
+	  {
+		  potvar.pot_value = HAL_ADC_GetValue(&hadc1);
+	  }
 
 
 	  if (counter % 2 == 1 && comp > 512)
@@ -92,8 +93,17 @@ int main(void)
 		  {
 			  HAL_SPI_Abort(&hspi1);
 		  }
-
+		  /*for(uint8_t count = 0 ; count < 4 ; count ++)
+		  {
+			  HAL_SPI_Transmit(&hspi1, &array[count], 1, 10);
+			  HAL_Delay(1000);
+		  }*/
 	  }
+/*	  else
+	  {
+		  HAL_SPI_Transmit(&hspi1, DISABLE, 1, 10);
+	  }
+	  delay(1000);    */
 
   }
   return 0;

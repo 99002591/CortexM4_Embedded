@@ -30,7 +30,8 @@ void loop()
       Serial.print("Humidity is  ");
       Serial.println(Slavereceived);
       delay(100);
-      
+  
+  
   }
  
 }
